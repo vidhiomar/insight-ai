@@ -31,14 +31,14 @@ export default function HistoryPage() {
     <DashboardLayout>
       <div className="p-6">
         <div className="flex items-center justify-between mb-6">
-          <h1 className="text-2xl font-bold">History</h1>
+          <h1 className="text-2xl font-bold text-foreground">History</h1>
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
             <input
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search summaries..."
-              className="pl-9 pr-4 py-2 text-sm bg-secondary/50 border border-border rounded-lg focus:outline-none focus:border-primary/50 transition-colors"
+              className="pl-9 pr-4 py-2 text-sm bg-secondary/50 border border-border rounded-lg focus:outline-none focus:border-foreground/20 transition-colors"
             />
           </div>
         </div>

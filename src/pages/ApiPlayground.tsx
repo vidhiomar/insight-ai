@@ -40,39 +40,43 @@ export default function ApiPlayground() {
     <DashboardLayout>
       <div className="p-6 h-screen flex flex-col">
         <div className="flex items-center justify-between mb-6">
-          <h1 className="text-2xl font-bold">API Playground</h1>
+          <h1 className="text-2xl font-bold text-foreground">API Playground</h1>
           <div className="flex items-center gap-2 text-xs text-muted-foreground">
-            <span className="px-2 py-1 rounded bg-emerald-400/10 text-emerald-400 font-mono">POST</span>
+            <span className="px-2 py-1 rounded bg-foreground/10 text-foreground/70 font-mono">POST</span>
             <span className="font-mono">/api/summarize</span>
           </div>
         </div>
 
         <div className="flex-1 grid md:grid-cols-2 gap-6 min-h-0">
-          {/* Request */}
           <div className="flex flex-col">
             <div className="flex items-center justify-between mb-3">
-              <h3 className="text-sm font-semibold">Request</h3>
+              <h3 className="text-sm font-semibold text-foreground">Request</h3>
               <div className="flex gap-1">
                 <button onClick={() => copyCode(request)} className="p-1.5 rounded-lg hover:bg-muted transition-colors">
                   <Copy className="w-3.5 h-3.5 text-muted-foreground" />
                 </button>
-                <button onClick={handleRun} disabled={isLoading} className="btn-gradient !px-3 !py-1.5 text-xs flex items-center gap-1.5 disabled:opacity-40">
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={handleRun}
+                  disabled={isLoading}
+                  className="btn-mono !px-3 !py-1.5 text-xs flex items-center gap-1.5 disabled:opacity-40"
+                >
                   <Play className="w-3 h-3" /> {isLoading ? "Running..." : "Run"}
-                </button>
+                </motion.button>
               </div>
             </div>
             <textarea
               value={request}
               onChange={(e) => setRequest(e.target.value)}
-              className="flex-1 bg-secondary/50 border border-border rounded-xl p-4 font-mono text-xs text-muted-foreground resize-none focus:outline-none focus:border-primary/50"
+              className="flex-1 bg-secondary/50 border border-border rounded-xl p-4 font-mono text-xs text-muted-foreground resize-none focus:outline-none focus:border-foreground/20"
               spellCheck={false}
             />
           </div>
 
-          {/* Response */}
           <div className="flex flex-col">
             <div className="flex items-center justify-between mb-3">
-              <h3 className="text-sm font-semibold">Response</h3>
+              <h3 className="text-sm font-semibold text-foreground">Response</h3>
               {response && (
                 <button onClick={() => copyCode(response)} className="p-1.5 rounded-lg hover:bg-muted transition-colors">
                   <Copy className="w-3.5 h-3.5 text-muted-foreground" />
@@ -82,11 +86,11 @@ export default function ApiPlayground() {
             <div className="flex-1 bg-secondary/50 border border-border rounded-xl p-4 font-mono text-xs overflow-auto">
               {isLoading ? (
                 <div className="flex items-center gap-2 text-muted-foreground">
-                  <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1 }} className="w-3 h-3 border border-primary border-t-transparent rounded-full" />
+                  <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1 }} className="w-3 h-3 border border-foreground/50 border-t-transparent rounded-full" />
                   Executing...
                 </div>
               ) : response ? (
-                <motion.pre initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-emerald-400 whitespace-pre-wrap">
+                <motion.pre initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-foreground/70 whitespace-pre-wrap">
                   {response}
                 </motion.pre>
               ) : (

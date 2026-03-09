@@ -8,7 +8,6 @@ import {
   Code2,
   Settings,
   User,
-  Sparkles,
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
@@ -35,14 +34,14 @@ export function AppSidebar() {
       className="h-screen sticky top-0 border-r border-border bg-secondary flex flex-col"
     >
       <div className="p-4 flex items-center gap-3 border-b border-border">
-        <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-500 via-indigo-500 to-cyan-400 flex items-center justify-center flex-shrink-0">
-          <Sparkles className="w-4 h-4 text-foreground" />
+        <div className="w-8 h-8 rounded-lg bg-foreground flex items-center justify-center flex-shrink-0">
+          <span className="text-background font-bold text-xs">AI</span>
         </div>
         {!collapsed && (
           <motion.span
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="font-bold text-sm gradient-text whitespace-nowrap"
+            className="font-bold text-sm text-foreground whitespace-nowrap"
           >
             AI Summarizer
           </motion.span>

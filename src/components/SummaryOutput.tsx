@@ -1,4 +1,4 @@
-import { Copy, Download, RefreshCw, Sparkles } from "lucide-react";
+import { Copy, Download, RefreshCw } from "lucide-react";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 
@@ -29,10 +29,7 @@ export function SummaryOutput({ summary, isLoading, loadingStep, onRegenerate }:
   return (
     <div className="flex flex-col h-full">
       <div className="flex items-center justify-between mb-3">
-        <h3 className="text-sm font-semibold flex items-center gap-2">
-          <Sparkles className="w-4 h-4 text-primary" />
-          Summary Output
-        </h3>
+        <h3 className="text-sm font-semibold">Summary Output</h3>
         {summary && (
           <div className="flex items-center gap-1">
             <button onClick={handleCopy} className="p-2 rounded-lg hover:bg-muted transition-colors" title="Copy">
@@ -55,7 +52,7 @@ export function SummaryOutput({ summary, isLoading, loadingStep, onRegenerate }:
               {[0, 1, 2].map((i) => (
                 <motion.div
                   key={i}
-                  className="w-2.5 h-2.5 rounded-full bg-primary"
+                  className="w-2.5 h-2.5 rounded-full bg-foreground"
                   animate={{ scale: [1, 1.3, 1], opacity: [0.4, 1, 0.4] }}
                   transition={{ duration: 1.2, repeat: Infinity, delay: i * 0.2 }}
                 />
@@ -80,7 +77,9 @@ export function SummaryOutput({ summary, isLoading, loadingStep, onRegenerate }:
           </motion.div>
         ) : (
           <div className="flex flex-col items-center justify-center h-full text-center">
-            <Sparkles className="w-10 h-10 text-muted-foreground/30 mb-3" />
+            <div className="w-10 h-10 rounded-full border border-border flex items-center justify-center mb-3">
+              <span className="text-muted-foreground/30 text-lg">✦</span>
+            </div>
             <p className="text-sm text-muted-foreground/50">
               Your AI-generated summary will appear here
             </p>

@@ -34,7 +34,7 @@ export default function AnalyticsPage() {
   return (
     <DashboardLayout>
       <div className="p-6">
-        <h1 className="text-2xl font-bold mb-6">Analytics</h1>
+        <h1 className="text-2xl font-bold mb-6 text-foreground">Analytics</h1>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
           {stats.map((stat, i) => (
@@ -46,21 +46,20 @@ export default function AnalyticsPage() {
               className="glass-card p-5"
             >
               <div className="flex items-center justify-between mb-3">
-                <stat.icon className="w-5 h-5 text-primary" />
+                <stat.icon className="w-5 h-5 text-foreground/70" />
                 {stat.change && (
-                  <span className="text-xs text-emerald-400 bg-emerald-400/10 px-2 py-0.5 rounded-full">{stat.change}</span>
+                  <span className="text-xs text-muted-foreground bg-foreground/5 px-2 py-0.5 rounded-full">{stat.change}</span>
                 )}
               </div>
-              <p className="text-2xl font-bold">{stat.value}</p>
+              <p className="text-2xl font-bold text-foreground">{stat.value}</p>
               <p className="text-xs text-muted-foreground mt-1">{stat.label}</p>
             </motion.div>
           ))}
         </div>
 
         <div className="grid lg:grid-cols-3 gap-6">
-          {/* Chart */}
           <div className="lg:col-span-2 glass-card p-6">
-            <h3 className="text-sm font-semibold mb-6">Summaries This Week</h3>
+            <h3 className="text-sm font-semibold mb-6 text-foreground">Summaries This Week</h3>
             <div className="flex items-end gap-3 h-48">
               {barData.map((d, i) => (
                 <div key={d.label} className="flex-1 flex flex-col items-center gap-2">
@@ -68,7 +67,7 @@ export default function AnalyticsPage() {
                     initial={{ height: 0 }}
                     animate={{ height: `${(d.value / maxBar) * 100}%` }}
                     transition={{ delay: i * 0.08, duration: 0.5 }}
-                    className="w-full rounded-t-md bg-gradient-to-t from-violet-500/80 to-cyan-400/60"
+                    className="w-full rounded-t-md bg-foreground/20"
                   />
                   <span className="text-xs text-muted-foreground">{d.label}</span>
                 </div>
@@ -76,14 +75,13 @@ export default function AnalyticsPage() {
             </div>
           </div>
 
-          {/* Keywords */}
           <div className="glass-card p-6">
-            <h3 className="text-sm font-semibold mb-4">Top Keywords</h3>
+            <h3 className="text-sm font-semibold mb-4 text-foreground">Top Keywords</h3>
             <div className="space-y-3">
-              {keywords.map((kw, i) => (
+              {keywords.map((kw) => (
                 <div key={kw.word} className="flex items-center justify-between">
                   <span className="text-xs text-muted-foreground">{kw.word}</span>
-                  <span className="text-xs font-medium">{kw.count}</span>
+                  <span className="text-xs font-medium text-foreground">{kw.count}</span>
                 </div>
               ))}
             </div>
