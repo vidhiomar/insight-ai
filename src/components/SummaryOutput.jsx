@@ -2,14 +2,7 @@ import { Copy, Download, RefreshCw } from "lucide-react";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 
-interface SummaryOutputProps {
-  summary: string;
-  isLoading: boolean;
-  loadingStep: string;
-  onRegenerate: () => void;
-}
-
-export function SummaryOutput({ summary, isLoading, loadingStep, onRegenerate }: SummaryOutputProps) {
+export function SummaryOutput({ summary, isLoading, loadingStep, onRegenerate }) {
   const handleCopy = () => {
     navigator.clipboard.writeText(summary);
     toast.success("Copied to clipboard!");

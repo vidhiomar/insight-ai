@@ -1,4 +1,8 @@
 import { motion, AnimatePresence } from "framer-motion";
+// react-parallax-mouse exports MouseParallaxContainer/Child
+// Landing used to import `Parallax` which was undefined causing render errors.
+// we alias the container to Parallax for backwards compatibility.
+import { MouseParallaxContainer as Parallax } from "react-parallax-mouse";
 import { Navbar } from "@/components/Navbar";
 import { Link } from "react-router-dom";
 import {
@@ -51,7 +55,7 @@ const carouselSlides = [
 
 const fadeUp = {
   hidden: { opacity: 0, y: 30 },
-  visible: (i: number) => ({ opacity: 1, y: 0, transition: { delay: i * 0.1, duration: 0.5 } }),
+  visible: (i) => ({ opacity: 1, y: 0, transition: { delay: i * 0.1, duration: 0.5 } }),
 };
 
 export default function Landing() {
@@ -75,30 +79,32 @@ export default function Landing() {
       <Navbar />
 
       {/* Hero */}
-      <section className="relative pt-32 pb-20 px-6 overflow-hidden">
-        {/* Floating elements */}
-        <motion.div
-          className="absolute top-40 left-[10%] w-1 h-1 rounded-full bg-foreground/20"
-          animate={{ y: [0, -20, 0], opacity: [0.2, 0.5, 0.2] }}
-          transition={{ duration: 4, repeat: Infinity }}
-        />
-        <motion.div
-          className="absolute top-60 right-[15%] w-1.5 h-1.5 rounded-full bg-foreground/15"
-          animate={{ y: [0, -15, 0], opacity: [0.15, 0.4, 0.15] }}
-          transition={{ duration: 5, repeat: Infinity, delay: 1 }}
-        />
-        <motion.div
-          className="absolute top-80 left-[25%] w-px h-px bg-foreground/30"
-          animate={{ y: [0, -25, 0], opacity: [0.1, 0.3, 0.1] }}
-          transition={{ duration: 6, repeat: Infinity, delay: 2 }}
-        />
-
-        <div className="relative max-w-4xl mx-auto text-center">
+      {/* alias Parallax now refers to MouseParallaxContainer */}
+      <Parallax strength={0.05}>
+        <section className="relative pt-32 pb-20 px-6 overflow-hidden">
+          {/* Floating elements */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-          >
+            className="absolute top-40 left-[10%] w-1 h-1 rounded-full bg-foreground/20"
+            animate={{ y: [0, -20, 0], opacity: [0.2, 0.5, 0.2] }}
+            transition={{ duration: 4, repeat: Infinity }}
+          />
+          <motion.div
+            className="absolute top-60 right-[15%] w-1.5 h-1.5 rounded-full bg-foreground/15"
+            animate={{ y: [0, -15, 0], opacity: [0.15, 0.4, 0.15] }}
+            transition={{ duration: 5, repeat: Infinity, delay: 1 }}
+          />
+          <motion.div
+            className="absolute top-80 left-[25%] w-px h-px bg-foreground/30"
+            animate={{ y: [0, -25, 0], opacity: [0.1, 0.3, 0.1] }}
+            transition={{ duration: 6, repeat: Infinity, delay: 2 }}
+          />
+
+          <div className="relative max-w-4xl mx-auto text-center">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+            >
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-border bg-secondary/50 text-xs text-muted-foreground mb-8">
               <span className="w-1.5 h-1.5 rounded-full bg-foreground/60" />
               Powered by advanced AI models
@@ -156,6 +162,7 @@ export default function Landing() {
           </motion.div>
         </div>
       </section>
+      </Parallax>
 
       {/* Feature Carousel */}
       <section className="py-24 px-6 border-t border-border">

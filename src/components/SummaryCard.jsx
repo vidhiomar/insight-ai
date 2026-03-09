@@ -1,16 +1,7 @@
 import { motion } from "framer-motion";
 import { Clock, Trash2, ExternalLink } from "lucide-react";
 
-interface SummaryCardProps {
-  title: string;
-  preview: string;
-  date: string;
-  wordCount: number;
-  onDelete?: () => void;
-  onOpen?: () => void;
-}
-
-export function SummaryCard({ title, preview, date, wordCount, onDelete, onOpen }: SummaryCardProps) {
+export function SummaryCard({ title, preview, date, wordCount, onDelete, onOpen }) {
   return (
     <motion.div
       whileHover={{ y: -2 }}

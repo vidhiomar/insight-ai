@@ -22,7 +22,7 @@ export default function HistoryPage() {
     item.title.toLowerCase().includes(search.toLowerCase())
   );
 
-  const handleDelete = (id: number) => {
+  const handleDelete = (id) => {
     setItems(items.filter((i) => i.id !== id));
     toast.success("Summary deleted");
   };

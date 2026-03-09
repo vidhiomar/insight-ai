@@ -1,11 +1,6 @@
-import { ReactNode } from "react";
 import { AppSidebar } from "./AppSidebar";
 
-interface DashboardLayoutProps {
-  children: ReactNode;
-}
-
-export function DashboardLayout({ children }: DashboardLayoutProps) {
+export function DashboardLayout({ children }) {
   return (
     <div className="flex min-h-screen w-full">
       <AppSidebar />

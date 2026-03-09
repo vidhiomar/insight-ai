@@ -1,8 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
 @layer base {
   :root {
@@ -39,11 +39,51 @@
     --glass-bg: rgba(17, 17, 17, 0.6);
     --glass-border: rgba(255, 255, 255, 0.06);
   }
+
+  .dark {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 0%;
+
+    --card: 0 0% 93.3%;
+    --card-foreground: 0 0% 0%;
+
+    --popover: 0 0% 93.3%;
+    --popover-foreground: 0 0% 0%;
+
+    --primary: 0 0% 0%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 0 0% 96.1%;
+    --secondary-foreground: 0 0% 0%;
+
+    --muted: 0 0% 86.7%;
+    --muted-foreground: 0 0% 30%;
+
+    --accent: 0 0% 86.7%;
+    --accent-foreground: 0 0% 0%;
+
+    --destructive: 0 0% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 0 0% 86.7%;
+    --input: 0 0% 86.7%;
+    --ring: 0 0% 0%;
+
+    --glass-bg: rgba(255, 255, 255, 0.6);
+    --glass-border: rgba(0, 0, 0, 0.06);
+  }
 }
 
 @layer base {
   * {
     @apply border-border;
+  }
+
+  html, body, #root {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
   }
 
   body {

@@ -10,7 +10,7 @@ const models = [
   { name: "Mistral", speed: "1.3s", quality: 4.3 },
 ];
 
-const mockResults: Record<string, string> = {
+const mockResults = {
   "GPT-4": "AI is rapidly transforming industries through advanced machine learning, enabling unprecedented pattern recognition and natural language understanding capabilities.",
   "LLaMA 3": "Artificial intelligence leverages ML to transform industries, with NLP reaching near-human performance in text comprehension and generation tasks.",
   "Gemini Pro": "The AI revolution spans healthcare to finance, with deep learning models processing vast datasets for pattern identification and language understanding.",
@@ -19,7 +19,7 @@ const mockResults: Record<string, string> = {
 
 export default function ComparePage() {
   const [input, setInput] = useState("");
-  const [results, setResults] = useState<Record<string, string>>({});
+  const [results, setResults] = useState({});
   const [isLoading, setIsLoading] = useState(false);
 
   const handleCompare = () => {

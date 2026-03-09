@@ -31,7 +31,7 @@ export default function ApiPlayground() {
     }, 1500);
   };
 
-  const copyCode = (text: string) => {
+  const copyCode = (text) => {
     navigator.clipboard.writeText(text);
     toast.success("Copied!");
   };

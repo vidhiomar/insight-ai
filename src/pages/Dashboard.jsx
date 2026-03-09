@@ -4,7 +4,7 @@ import { TextInput } from "@/components/TextInput";
 import { SummaryOutput } from "@/components/SummaryOutput";
 import { motion } from "framer-motion";
 
-const summaryTypes = ["Short", "Detailed", "Bullet Points", "Key Insights"] as const;
+const summaryTypes = ["Short", "Detailed", "Bullet Points", "Key Insights"];
 
 const loadingSteps = [
   "Analyzing text...",
@@ -12,7 +12,7 @@ const loadingSteps = [
   "Generating summary...",
 ];
 
-const mockSummaries: Record<string, string> = {
+const mockSummaries = {
   Short: "AI is rapidly transforming industries through machine learning, enabling pattern recognition in large datasets and natural language understanding at unprecedented scale.",
   Detailed: "Artificial intelligence has become a cornerstone of modern technology, driving innovation across healthcare, finance, and education. Machine learning algorithms process vast datasets to identify patterns that would be impossible for humans to detect manually. Natural language processing has advanced to the point where computers can understand context, generate human-like text, and translate between languages with high accuracy. These developments are creating new opportunities while also raising important ethical questions about privacy, bias, and the future of work.",
   "Bullet Points": "• AI is transforming healthcare, finance, and education\n• ML algorithms identify patterns in large datasets\n• NLP enables human-like text understanding and generation\n• Raises ethical questions about privacy and bias\n• Creating new job opportunities while disrupting existing ones",
@@ -24,7 +24,7 @@ export default function Dashboard() {
   const [summary, setSummary] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [loadingStep, setLoadingStep] = useState("");
-  const [activeType, setActiveType] = useState<typeof summaryTypes[number]>("Short");
+  const [activeType, setActiveType] = useState("Short");
 
   const handleSubmit = useCallback(() => {
     if (!inputText.trim()) return;

@@ -1,25 +1,18 @@
 import { useState } from "react";
 import { Upload, FileText } from "lucide-react";
 
-interface TextInputProps {
-  value: string;
-  onChange: (value: string) => void;
-  onSubmit: () => void;
-  isLoading: boolean;
-}
-
-export function TextInput({ value, onChange, onSubmit, isLoading }: TextInputProps) {
+export function TextInput({ value, onChange, onSubmit, isLoading }) {
   const [isDragging, setIsDragging] = useState(false);
   const wordCount = value.trim() ? value.trim().split(/\s+/).length : 0;
   const charCount = value.length;
 
-  const handleDrop = (e: React.DragEvent) => {
+  const handleDrop = (e) => {
     e.preventDefault();
     setIsDragging(false);
     const file = e.dataTransfer.files[0];
     if (file && file.type === "text/plain") {
       const reader = new FileReader();
-      reader.onload = (ev) => onChange(ev.target?.result as string);
+      reader.onload = (ev) => onChange(ev.target?.result);
       reader.readAsText(file);
     }
   };
