@@ -15,32 +15,27 @@
     --popover: 0 0% 6.7%;
     --popover-foreground: 0 0% 100%;
 
-    --primary: 263 70% 58%;
-    --primary-foreground: 0 0% 100%;
+    --primary: 0 0% 100%;
+    --primary-foreground: 0 0% 0%;
 
     --secondary: 0 0% 3.9%;
     --secondary-foreground: 0 0% 100%;
 
-    --muted: 0 0% 12.2%;
-    --muted-foreground: 240 3.8% 66.5%;
+    --muted: 0 0% 13.3%;
+    --muted-foreground: 0 0% 70%;
 
-    --accent: 0 0% 12.2%;
+    --accent: 0 0% 13.3%;
     --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 84.2% 60.2%;
+    --destructive: 0 0% 40%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 0 0% 12.2%;
-    --input: 0 0% 12.2%;
-    --ring: 263 70% 58%;
+    --border: 0 0% 13.3%;
+    --input: 0 0% 13.3%;
+    --ring: 0 0% 100%;
 
     --radius: 0.75rem;
 
-    /* Custom tokens */
-    --gradient-accent: linear-gradient(135deg, #7C3AED, #6366F1, #22D3EE);
-    --gradient-accent-hover: linear-gradient(135deg, #8B5CF6, #818CF8, #67E8F9);
-    --glow-primary: 0 0 20px rgba(124, 58, 237, 0.4);
-    --glow-cyan: 0 0 20px rgba(34, 211, 238, 0.3);
     --glass-bg: rgba(17, 17, 17, 0.6);
     --glass-border: rgba(255, 255, 255, 0.06);
   }
@@ -65,42 +60,21 @@
     @apply rounded-xl;
   }
 
-  .gradient-text {
-    background: var(--gradient-accent);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+  .btn-mono {
+    @apply bg-foreground text-background font-semibold px-6 py-3 rounded-lg transition-all duration-300;
   }
 
-  .gradient-border {
-    position: relative;
-    background: hsl(var(--card));
-    @apply rounded-xl;
-  }
-
-  .gradient-border::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    padding: 1px;
-    background: var(--gradient-accent);
-    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
-    pointer-events: none;
-  }
-
-  .btn-gradient {
-    background: var(--gradient-accent);
-    @apply text-foreground font-semibold px-6 py-3 rounded-lg transition-all duration-300;
-    box-shadow: var(--glow-primary);
-  }
-
-  .btn-gradient:hover {
-    background: var(--gradient-accent-hover);
-    box-shadow: 0 0 30px rgba(124, 58, 237, 0.6);
+  .btn-mono:hover {
+    @apply bg-foreground/90;
     transform: translateY(-1px);
+  }
+
+  .btn-mono-outline {
+    @apply bg-transparent text-foreground font-semibold px-6 py-3 rounded-lg border border-border transition-all duration-300;
+  }
+
+  .btn-mono-outline:hover {
+    @apply bg-foreground/5;
   }
 
   .sidebar-link {
@@ -112,30 +86,6 @@
   }
 
   .sidebar-link.active {
-    @apply bg-primary/10 text-primary;
-  }
-}
-
-@layer utilities {
-  .animate-glow {
-    animation: glow 3s ease-in-out infinite alternate;
-  }
-
-  @keyframes glow {
-    from {
-      box-shadow: 0 0 20px rgba(124, 58, 237, 0.2), 0 0 40px rgba(99, 102, 241, 0.1);
-    }
-    to {
-      box-shadow: 0 0 30px rgba(124, 58, 237, 0.4), 0 0 60px rgba(99, 102, 241, 0.2);
-    }
-  }
-
-  @keyframes float {
-    0%, 100% { transform: translateY(0px); }
-    50% { transform: translateY(-10px); }
-  }
-
-  .animate-float {
-    animation: float 6s ease-in-out infinite;
+    @apply bg-foreground/10 text-foreground;
   }
 }

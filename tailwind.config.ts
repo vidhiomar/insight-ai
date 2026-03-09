@@ -50,17 +50,6 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        cyan: {
-          400: "#22D3EE",
-          500: "#06B6D4",
-        },
-        violet: {
-          500: "#7C3AED",
-          600: "#6D28D9",
-        },
-        indigo: {
-          500: "#6366F1",
-        },
       },
       borderRadius: {
         lg: "var(--radius)",
