@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { DashboardLayout } from "@/components/DashboardLayout";
+import { motion } from "framer-motion";
 import { toast } from "sonner";
 
 export default function SettingsPage() {
@@ -9,16 +10,16 @@ export default function SettingsPage() {
 
   const handleSave = () => toast.success("Settings saved!");
 
-  const selectClass = "w-full bg-secondary/50 border border-border rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-primary/50 transition-colors";
+  const selectClass = "w-full bg-secondary/50 border border-border rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-foreground/20 transition-colors";
 
   return (
     <DashboardLayout>
       <div className="p-6 max-w-2xl">
-        <h1 className="text-2xl font-bold mb-6">Settings</h1>
+        <h1 className="text-2xl font-bold mb-6 text-foreground">Settings</h1>
 
         <div className="space-y-6">
           <div className="glass-card p-6 space-y-5">
-            <h3 className="font-semibold text-sm">Preferences</h3>
+            <h3 className="font-semibold text-sm text-foreground">Preferences</h3>
 
             <div>
               <label className="text-xs text-muted-foreground mb-1.5 block">Default Summary Type</label>
@@ -51,9 +52,14 @@ export default function SettingsPage() {
             </div>
           </div>
 
-          <button onClick={handleSave} className="btn-gradient text-sm">
+          <motion.button
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            onClick={handleSave}
+            className="btn-mono text-sm"
+          >
             Save Settings
-          </button>
+          </motion.button>
         </div>
       </div>
     </DashboardLayout>

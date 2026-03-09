@@ -1,16 +1,17 @@
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Navbar } from "@/components/Navbar";
 import { Link } from "react-router-dom";
 import {
-  Sparkles,
+  ArrowRight,
+  ArrowLeft,
+  FileText,
   Zap,
   Brain,
   Shield,
-  ArrowRight,
-  FileText,
   Cpu,
   CheckCircle2,
 } from "lucide-react";
+import { useState, useEffect, useCallback } from "react";
 
 const features = [
   { icon: Zap, title: "Lightning Fast", desc: "Get summaries in seconds with our optimized AI pipeline." },
@@ -25,22 +26,72 @@ const steps = [
   { num: "03", title: "Get Results", desc: "Receive an intelligent summary in seconds." },
 ];
 
+const carouselSlides = [
+  {
+    title: "AI Summarization",
+    desc: "Transform lengthy articles into concise, intelligent summaries with a single click.",
+    preview: "Input → AI Processing → Clean Summary",
+  },
+  {
+    title: "Bullet Point Extraction",
+    desc: "Automatically extract key points and organize them into structured bullet lists.",
+    preview: "• Key insight 1\n• Key insight 2\n• Key insight 3",
+  },
+  {
+    title: "Model Comparison",
+    desc: "Compare outputs from GPT-4, LLaMA, Gemini, and Mistral side by side.",
+    preview: "GPT-4 vs LLaMA vs Gemini vs Mistral",
+  },
+  {
+    title: "Analytics Dashboard",
+    desc: "Track your usage, compression ratios, and time saved with detailed analytics.",
+    preview: "1,284 summaries · 78% compression · 42h saved",
+  },
+];
+
 const fadeUp = {
   hidden: { opacity: 0, y: 30 },
   visible: (i: number) => ({ opacity: 1, y: 0, transition: { delay: i * 0.1, duration: 0.5 } }),
 };
 
 export default function Landing() {
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  const nextSlide = useCallback(() => {
+    setCurrentSlide((prev) => (prev + 1) % carouselSlides.length);
+  }, []);
+
+  const prevSlide = useCallback(() => {
+    setCurrentSlide((prev) => (prev - 1 + carouselSlides.length) % carouselSlides.length);
+  }, []);
+
+  useEffect(() => {
+    const interval = setInterval(nextSlide, 5000);
+    return () => clearInterval(interval);
+  }, [nextSlide]);
+
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
 
       {/* Hero */}
       <section className="relative pt-32 pb-20 px-6 overflow-hidden">
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[600px] rounded-full bg-violet-500/10 blur-[120px]" />
-          <div className="absolute top-1/3 left-1/3 w-[400px] h-[400px] rounded-full bg-cyan-400/5 blur-[100px]" />
-        </div>
+        {/* Floating elements */}
+        <motion.div
+          className="absolute top-40 left-[10%] w-1 h-1 rounded-full bg-foreground/20"
+          animate={{ y: [0, -20, 0], opacity: [0.2, 0.5, 0.2] }}
+          transition={{ duration: 4, repeat: Infinity }}
+        />
+        <motion.div
+          className="absolute top-60 right-[15%] w-1.5 h-1.5 rounded-full bg-foreground/15"
+          animate={{ y: [0, -15, 0], opacity: [0.15, 0.4, 0.15] }}
+          transition={{ duration: 5, repeat: Infinity, delay: 1 }}
+        />
+        <motion.div
+          className="absolute top-80 left-[25%] w-px h-px bg-foreground/30"
+          animate={{ y: [0, -25, 0], opacity: [0.1, 0.3, 0.1] }}
+          transition={{ duration: 6, repeat: Infinity, delay: 2 }}
+        />
 
         <div className="relative max-w-4xl mx-auto text-center">
           <motion.div
@@ -49,18 +100,16 @@ export default function Landing() {
             transition={{ duration: 0.6 }}
           >
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-border bg-secondary/50 text-xs text-muted-foreground mb-8">
-              <Sparkles className="w-3 h-3 text-primary" />
+              <span className="w-1.5 h-1.5 rounded-full bg-foreground/60" />
               Powered by advanced AI models
             </div>
 
-            <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight leading-[1.1] mb-6">
-              Turn Long Text Into{" "}
-              <span className="gradient-text">Intelligent Summaries</span>{" "}
-              with AI
+            <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight leading-[1.1] mb-6 text-foreground">
+              AI Text Summarizer
             </h1>
 
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-10">
-              Paste any article, paper, or document and get precise, context-aware summaries instantly. Compare results across multiple AI models.
+              Transform long content into intelligent summaries. Compare results across multiple AI models.
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -68,9 +117,9 @@ export default function Landing() {
                 <motion.button
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.97 }}
-                  className="btn-gradient flex items-center gap-2 text-base"
+                  className="btn-mono flex items-center gap-2 text-base"
                 >
-                  Try AI Summarizer <ArrowRight className="w-5 h-5" />
+                  Try Summarizing <ArrowRight className="w-5 h-5" />
                 </motion.button>
               </Link>
               <a href="#how-it-works" className="text-sm text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1">
@@ -87,18 +136,18 @@ export default function Landing() {
             className="mt-16 glass-card p-6 max-w-3xl mx-auto text-left"
           >
             <div className="flex items-center gap-2 mb-4">
-              <FileText className="w-4 h-4 text-primary" />
+              <FileText className="w-4 h-4 text-foreground/60" />
               <span className="text-xs font-medium text-muted-foreground">Live Demo</span>
             </div>
             <div className="grid md:grid-cols-2 gap-4">
               <div className="rounded-lg bg-background/50 p-4 border border-border">
                 <p className="text-xs text-muted-foreground/60 mb-2">Input</p>
                 <p className="text-xs text-muted-foreground leading-relaxed line-clamp-4">
-                  Artificial intelligence has transformed industries from healthcare to finance. Machine learning models can now process vast datasets to identify patterns that humans might miss. Natural language processing enables computers to understand and generate human-like text...
+                  Artificial intelligence has transformed industries from healthcare to finance. Machine learning models can now process vast datasets to identify patterns that humans might miss...
                 </p>
               </div>
-              <div className="rounded-lg bg-primary/5 p-4 border border-primary/20">
-                <p className="text-xs text-primary mb-2">Summary</p>
+              <div className="rounded-lg bg-foreground/5 p-4 border border-border">
+                <p className="text-xs text-foreground/60 mb-2">Summary</p>
                 <p className="text-xs text-muted-foreground leading-relaxed">
                   AI is revolutionizing multiple industries through ML pattern recognition and NLP capabilities, enabling automated text understanding and generation at scale.
                 </p>
@@ -108,12 +157,89 @@ export default function Landing() {
         </div>
       </section>
 
+      {/* Feature Carousel */}
+      <section className="py-24 px-6 border-t border-border">
+        <div className="max-w-5xl mx-auto">
+          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} className="text-center mb-16">
+            <motion.h2 variants={fadeUp} custom={0} className="text-3xl md:text-4xl font-bold mb-4 text-foreground">
+              What You Can Do
+            </motion.h2>
+            <motion.p variants={fadeUp} custom={1} className="text-muted-foreground max-w-xl mx-auto">
+              Explore the powerful features of AI Summarizer.
+            </motion.p>
+          </motion.div>
+
+          <div className="relative">
+            <div className="overflow-hidden rounded-xl border border-border bg-card">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={currentSlide}
+                  initial={{ opacity: 0, x: 50 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -50 }}
+                  transition={{ duration: 0.4 }}
+                  className="p-10 md:p-16"
+                >
+                  <div className="grid md:grid-cols-2 gap-10 items-center">
+                    <div>
+                      <span className="text-xs text-muted-foreground mb-2 block">
+                        {String(currentSlide + 1).padStart(2, "0")} / {String(carouselSlides.length).padStart(2, "0")}
+                      </span>
+                      <h3 className="text-2xl font-bold mb-3 text-foreground">{carouselSlides[currentSlide].title}</h3>
+                      <p className="text-muted-foreground text-sm leading-relaxed">{carouselSlides[currentSlide].desc}</p>
+                    </div>
+                    <div className="rounded-lg border border-border bg-background p-6">
+                      <pre className="text-xs text-muted-foreground font-mono whitespace-pre-wrap">
+                        {carouselSlides[currentSlide].preview}
+                      </pre>
+                    </div>
+                  </div>
+                </motion.div>
+              </AnimatePresence>
+            </div>
+
+            {/* Arrow nav */}
+            <div className="flex items-center justify-between mt-6">
+              <div className="flex gap-2">
+                {carouselSlides.map((_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setCurrentSlide(i)}
+                    className={`w-2 h-2 rounded-full transition-all ${
+                      i === currentSlide ? "bg-foreground w-6" : "bg-foreground/20"
+                    }`}
+                  />
+                ))}
+              </div>
+              <div className="flex gap-2">
+                <motion.button
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                  onClick={prevSlide}
+                  className="w-10 h-10 rounded-full border border-border flex items-center justify-center hover:bg-foreground/5 transition-colors"
+                >
+                  <ArrowLeft className="w-4 h-4" />
+                </motion.button>
+                <motion.button
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                  onClick={nextSlide}
+                  className="w-10 h-10 rounded-full border border-border flex items-center justify-center hover:bg-foreground/5 transition-colors"
+                >
+                  <ArrowRight className="w-4 h-4" />
+                </motion.button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Features */}
-      <section id="features" className="py-24 px-6">
+      <section id="features" className="py-24 px-6 border-t border-border">
         <div className="max-w-6xl mx-auto">
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} className="text-center mb-16">
-            <motion.h2 variants={fadeUp} custom={0} className="text-3xl md:text-4xl font-bold mb-4">
-              Why Choose <span className="gradient-text">AI Summarizer</span>
+            <motion.h2 variants={fadeUp} custom={0} className="text-3xl md:text-4xl font-bold mb-4 text-foreground">
+              Why Choose AI Summarizer
             </motion.h2>
             <motion.p variants={fadeUp} custom={1} className="text-muted-foreground max-w-xl mx-auto">
               Built for researchers, writers, and professionals who value their time.
@@ -132,10 +258,10 @@ export default function Landing() {
                 whileHover={{ y: -4 }}
                 className="glass-card p-6 group"
               >
-                <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
-                  <f.icon className="w-5 h-5 text-primary" />
+                <div className="w-10 h-10 rounded-lg bg-foreground/10 flex items-center justify-center mb-4 group-hover:bg-foreground/15 transition-colors">
+                  <f.icon className="w-5 h-5 text-foreground" />
                 </div>
-                <h3 className="font-semibold mb-2">{f.title}</h3>
+                <h3 className="font-semibold mb-2 text-foreground">{f.title}</h3>
                 <p className="text-sm text-muted-foreground">{f.desc}</p>
               </motion.div>
             ))}
@@ -147,8 +273,8 @@ export default function Landing() {
       <section id="how-it-works" className="py-24 px-6 border-t border-border">
         <div className="max-w-4xl mx-auto">
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} className="text-center mb-16">
-            <motion.h2 variants={fadeUp} custom={0} className="text-3xl md:text-4xl font-bold mb-4">
-              How It <span className="gradient-text">Works</span>
+            <motion.h2 variants={fadeUp} custom={0} className="text-3xl md:text-4xl font-bold mb-4 text-foreground">
+              How It Works
             </motion.h2>
           </motion.div>
 
@@ -163,8 +289,8 @@ export default function Landing() {
                 viewport={{ once: true }}
                 className="text-center"
               >
-                <span className="text-5xl font-black gradient-text">{s.num}</span>
-                <h3 className="font-semibold mt-4 mb-2">{s.title}</h3>
+                <span className="text-5xl font-black text-foreground/20">{s.num}</span>
+                <h3 className="font-semibold mt-4 mb-2 text-foreground">{s.title}</h3>
                 <p className="text-sm text-muted-foreground">{s.desc}</p>
               </motion.div>
             ))}
@@ -176,8 +302,8 @@ export default function Landing() {
       <section id="models" className="py-24 px-6 border-t border-border">
         <div className="max-w-6xl mx-auto">
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} className="text-center mb-16">
-            <motion.h2 variants={fadeUp} custom={0} className="text-3xl md:text-4xl font-bold mb-4">
-              Compare <span className="gradient-text">AI Models</span>
+            <motion.h2 variants={fadeUp} custom={0} className="text-3xl md:text-4xl font-bold mb-4 text-foreground">
+              Compare AI Models
             </motion.h2>
           </motion.div>
 
@@ -192,12 +318,12 @@ export default function Landing() {
                 viewport={{ once: true }}
                 className="glass-card p-5 text-center"
               >
-                <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-3">
-                  <Cpu className="w-6 h-6 text-primary" />
+                <div className="w-12 h-12 rounded-xl bg-foreground/10 flex items-center justify-center mx-auto mb-3">
+                  <Cpu className="w-6 h-6 text-foreground/70" />
                 </div>
-                <h4 className="font-semibold mb-1">{model}</h4>
+                <h4 className="font-semibold mb-1 text-foreground">{model}</h4>
                 <div className="flex items-center justify-center gap-1 text-xs text-muted-foreground">
-                  <CheckCircle2 className="w-3 h-3 text-emerald-400" />
+                  <CheckCircle2 className="w-3 h-3 text-foreground/50" />
                   Available
                 </div>
               </motion.div>
@@ -210,10 +336,10 @@ export default function Landing() {
       <footer className="border-t border-border py-12 px-6">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
-            <div className="w-6 h-6 rounded-md bg-gradient-to-br from-violet-500 via-indigo-500 to-cyan-400 flex items-center justify-center">
-              <Sparkles className="w-3 h-3 text-foreground" />
+            <div className="w-6 h-6 rounded-md bg-foreground flex items-center justify-center">
+              <span className="text-background font-bold text-[10px]">AI</span>
             </div>
-            <span className="text-sm font-semibold gradient-text">AI Summarizer</span>
+            <span className="text-sm font-semibold text-foreground">AI Summarizer</span>
           </div>
           <p className="text-xs text-muted-foreground">© 2026 AI Summarizer. All rights reserved.</p>
         </div>

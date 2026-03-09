@@ -4,10 +4,10 @@ import { motion } from "framer-motion";
 import { Cpu, Clock, Star } from "lucide-react";
 
 const models = [
-  { name: "GPT-4", speed: "2.1s", quality: 4.8, color: "from-emerald-500 to-emerald-600" },
-  { name: "LLaMA 3", speed: "1.8s", quality: 4.5, color: "from-blue-500 to-blue-600" },
-  { name: "Gemini Pro", speed: "1.5s", quality: 4.6, color: "from-amber-500 to-amber-600" },
-  { name: "Mistral", speed: "1.3s", quality: 4.3, color: "from-rose-500 to-rose-600" },
+  { name: "GPT-4", speed: "2.1s", quality: 4.8 },
+  { name: "LLaMA 3", speed: "1.8s", quality: 4.5 },
+  { name: "Gemini Pro", speed: "1.5s", quality: 4.6 },
+  { name: "Mistral", speed: "1.3s", quality: 4.3 },
 ];
 
 const mockResults: Record<string, string> = {
@@ -34,7 +34,7 @@ export default function ComparePage() {
   return (
     <DashboardLayout>
       <div className="p-6">
-        <h1 className="text-2xl font-bold mb-6">Compare Models</h1>
+        <h1 className="text-2xl font-bold mb-6 text-foreground">Compare Models</h1>
 
         <div className="glass-card p-4 mb-6">
           <textarea
@@ -44,9 +44,15 @@ export default function ComparePage() {
             className="w-full bg-transparent resize-none text-sm p-2 focus:outline-none min-h-[80px]"
           />
           <div className="flex justify-end">
-            <button onClick={handleCompare} disabled={isLoading || !input.trim()} className="btn-gradient text-sm !px-5 !py-2 disabled:opacity-40">
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={handleCompare}
+              disabled={isLoading || !input.trim()}
+              className="btn-mono text-sm !px-5 !py-2 disabled:opacity-40"
+            >
               {isLoading ? "Comparing..." : "Compare All"}
-            </button>
+            </motion.button>
           </div>
         </div>
 
@@ -60,20 +66,20 @@ export default function ComparePage() {
               className="glass-card p-5 flex flex-col"
             >
               <div className="flex items-center gap-2 mb-4">
-                <div className={`w-8 h-8 rounded-lg bg-gradient-to-br ${model.color} flex items-center justify-center`}>
+                <div className="w-8 h-8 rounded-lg bg-foreground/10 flex items-center justify-center">
                   <Cpu className="w-4 h-4 text-foreground" />
                 </div>
-                <h3 className="font-semibold text-sm">{model.name}</h3>
+                <h3 className="font-semibold text-sm text-foreground">{model.name}</h3>
               </div>
 
               <div className="flex-1 rounded-lg bg-background/50 border border-border p-3 mb-4 min-h-[100px]">
                 {isLoading ? (
                   <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                    <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1 }} className="w-3 h-3 border border-primary border-t-transparent rounded-full" />
+                    <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1 }} className="w-3 h-3 border border-foreground/50 border-t-transparent rounded-full" />
                     Processing...
                   </div>
                 ) : results[model.name] ? (
-                  <p className="text-xs text-muted-foreground leading-relaxed">{results[model.name]}</p>
+                  <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-xs text-muted-foreground leading-relaxed">{results[model.name]}</motion.p>
                 ) : (
                   <p className="text-xs text-muted-foreground/40">Results will appear here</p>
                 )}
@@ -81,7 +87,7 @@ export default function ComparePage() {
 
               <div className="flex items-center justify-between text-xs text-muted-foreground">
                 <span className="flex items-center gap-1"><Clock className="w-3 h-3" />{model.speed}</span>
-                <span className="flex items-center gap-1"><Star className="w-3 h-3 text-amber-400" />{model.quality}</span>
+                <span className="flex items-center gap-1"><Star className="w-3 h-3" />{model.quality}</span>
               </div>
             </motion.div>
           ))}
