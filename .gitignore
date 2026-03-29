@@ -1,0 +1,69 @@
+# =========================
+
+# Backend (Python / FastAPI)
+
+# =========================
+
+Backend/venv/
+Backend/**pycache**/
+Backend/**/*.pyc
+Backend/**/*.pyo
+
+# Python env files
+
+Backend/.env
+Backend/.env.*
+
+# Logs
+
+Backend/*.log
+
+# HuggingFace / ML cache
+
+.cache/
+**/.cache/
+models/
+
+# =========================
+
+# Frontend (React / Vite)
+
+# =========================
+
+Frontend/node_modules/
+Frontend/dist/
+Frontend/.vite/
+
+# Logs
+
+Frontend/npm-debug.log*
+Frontend/yarn-debug.log*
+Frontend/yarn-error.log*
+
+# =========================
+
+# IDE / Editor
+
+# =========================
+
+.vscode/
+.idea/
+
+# =========================
+
+# OS files
+
+# =========================
+
+.DS_Store
+Thumbs.db
+
+# =========================
+
+# Misc
+
+# =========================
+
+*.zip
+*.tar.gz
+*.env
