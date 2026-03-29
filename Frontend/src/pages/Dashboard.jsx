@@ -12,12 +12,8 @@ const loadingSteps = [
   "Generating summary...",
 ];
 
-const mockSummaries = {
-  Short: "AI is rapidly transforming industries through machine learning, enabling pattern recognition in large datasets and natural language understanding at unprecedented scale.",
-  Detailed: "Artificial intelligence has become a cornerstone of modern technology, driving innovation across healthcare, finance, and education. Machine learning algorithms process vast datasets to identify patterns that would be impossible for humans to detect manually. Natural language processing has advanced to the point where computers can understand context, generate human-like text, and translate between languages with high accuracy. These developments are creating new opportunities while also raising important ethical questions about privacy, bias, and the future of work.",
-  "Bullet Points": "• AI is transforming healthcare, finance, and education\n• ML algorithms identify patterns in large datasets\n• NLP enables human-like text understanding and generation\n• Raises ethical questions about privacy and bias\n• Creating new job opportunities while disrupting existing ones",
-  "Key Insights": "Key Insight 1: AI adoption is accelerating across all major industries\nKey Insight 2: Pattern recognition at scale is the primary value driver\nKey Insight 3: NLP has reached near-human performance levels\nKey Insight 4: Ethical considerations remain the biggest challenge",
-};
+
+
 
 export default function Dashboard() {
   const [inputText, setInputText] = useState("");
@@ -26,26 +22,52 @@ export default function Dashboard() {
   const [loadingStep, setLoadingStep] = useState("");
   const [activeType, setActiveType] = useState("Short");
 
-  const handleSubmit = useCallback(() => {
-    if (!inputText.trim()) return;
-    setIsLoading(true);
-    setSummary("");
+  const handleSubmit = useCallback(async () => {
+  if (!inputText.trim()) return;
 
-    let step = 0;
-    setLoadingStep(loadingSteps[0]);
-    const interval = setInterval(() => {
-      step++;
-      if (step < loadingSteps.length) {
-        setLoadingStep(loadingSteps[step]);
-      }
-    }, 1000);
+  setIsLoading(true);
+  setSummary("");
+  setLoadingStep(loadingSteps[0]);
 
-    setTimeout(() => {
-      clearInterval(interval);
-      setIsLoading(false);
-      setSummary(mockSummaries[activeType]);
-    }, 3000);
-  }, [inputText, activeType]);
+  let step = 0;
+  const interval = setInterval(() => {
+    step++;
+    if (step < loadingSteps.length) {
+      setLoadingStep(loadingSteps[step]);
+    }
+  }, 800);
+
+  try {
+    const typeMap = {
+      Short: "short",
+      Detailed: "medium",
+      "Bullet Points": "long",
+      "Key Insights": "long",
+    };
+
+    const res = await fetch("http://127.0.0.1:8000/api/summarize", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        text: inputText,
+        type: typeMap[activeType],
+      }),
+    });
+
+    const data = await res.json();
+
+    clearInterval(interval);
+    setSummary(data.summary);
+
+  } catch (error) {
+    console.error(error);
+    setSummary("Something went wrong. Please try again.");
+  } finally {
+    setIsLoading(false);
+  }
+}, [inputText, activeType]);
 
   return (
     <DashboardLayout>
@@ -77,6 +99,7 @@ export default function Dashboard() {
             onChange={setInputText}
             onSubmit={handleSubmit}
             isLoading={isLoading}
+            disabled={isLoading}
           />
           <SummaryOutput
             summary={summary}
