@@ -11,5 +11,5 @@ class TextInput(BaseModel):
     type: str = "short"   
 
 @router.post("/summarize")
-def summarize(data: TextInput):
-    return summarize_text(data.text)
+def summarize(data: Request):
+    return summarize_text(data.text, data.type)

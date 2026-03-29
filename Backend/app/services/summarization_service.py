@@ -1,7 +1,7 @@
 from app.models.bart import generate_summary
 
-def summarize_text(text: str):
-    return generate_summary(text)
+def summarize_text(text , summary_type):
+    return generate_summary(text , summary_type)
 
 def compare_models(text):
     return {
