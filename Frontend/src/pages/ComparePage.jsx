@@ -2,12 +2,7 @@ import { useState } from "react";
 import { DashboardLayout } from "@/components/DashboardLayout";
 import { motion } from "framer-motion";
 import { Cpu, Clock, Star } from "lucide-react";
-
-const models = [
-  { name: "BART", key: "bart" },
-  { name: "T5", key: "t5" },
-  { name: "Pegasus", key: "pegasus" },
-];
+import { summaryTypeMap, supportedModels } from "@/lib/models";
 
 export default function ComparePage() {
   const [input, setInput] = useState("");
@@ -19,15 +14,21 @@ export default function ComparePage() {
     setIsLoading(true);
     setResults({});
     try {
-      const res = await fetch("http://localhost:8000/api/compare", {
+      const res = await fetch("/api/compare", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ text: input }),
+        body: JSON.stringify({
+          text: input,
+          summary_type: summaryTypeMap.Short,
+        }),
       });
 
       const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.detail?.message || data.detail || "Request failed");
+      }
       setResults(data);
     } catch (error) {
       console.error('Compare error:', error);
@@ -61,10 +62,10 @@ export default function ComparePage() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {models.map((model, i) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+          {supportedModels.map((model, i) => (
             <motion.div
-              key={model.name}
+              key={model.id}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.1 }}
@@ -74,7 +75,7 @@ export default function ComparePage() {
                 <div className="w-8 h-8 rounded-lg bg-foreground/10 flex items-center justify-center">
                   <Cpu className="w-4 h-4 text-foreground" />
                 </div>
-                <h3 className="font-semibold text-sm text-foreground">{model.name}</h3>
+                <h3 className="font-semibold text-sm text-foreground break-all">{model.displayName}</h3>
               </div>
 
               <div className="flex-1 rounded-lg bg-background/50 border border-border p-3 mb-4 min-h-[100px]">
@@ -83,15 +84,15 @@ export default function ComparePage() {
                     <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1 }} className="w-3 h-3 border border-foreground/50 border-t-transparent rounded-full" />
                     Processing...
                   </div>
-                ) : results[model.key]?.text ? (
-                  <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-xs text-muted-foreground leading-relaxed">{results[model.key].text}</motion.p>
+                ) : results[model.id]?.text ? (
+                  <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-xs text-muted-foreground leading-relaxed">{results[model.id].text}</motion.p>
                 ) : (
                   <p className="text-xs text-muted-foreground/40">Results will appear here</p>
                 )}
               </div>
 
               <div className="flex items-center justify-between text-xs text-muted-foreground">
-                <span className="flex items-center gap-1"><Clock className="w-3 h-3" />{results[model.key]?.time ? `${results[model.key].time}s` : 'N/A'}</span>
+                <span className="flex items-center gap-1"><Clock className="w-3 h-3" />{results[model.id]?.time ? `${results[model.id].time}s` : 'N/A'}</span>
                 <span className="flex items-center gap-1"><Star className="w-3 h-3" />N/A</span>
               </div>
             </motion.div>

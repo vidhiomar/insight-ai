@@ -3,18 +3,12 @@ import { DashboardLayout } from "@/components/DashboardLayout";
 import { motion } from "framer-motion";
 import { Play, Copy } from "lucide-react";
 import { toast } from "sonner";
+import { defaultModelId } from "@/lib/models";
 
 const defaultRequest = `{
   "text": "Artificial intelligence has transformed industries from healthcare to finance. Machine learning models can now process vast datasets to identify patterns that humans might miss.",
-  "type": "short",
-  "model": "gpt-4"
-}`;
-
-const mockResponse = `{
-  "summary": "AI is transforming healthcare and finance through ML-powered pattern recognition in large datasets.",
-  "model": "gpt-4",
-  "tokens_used": 142,
-  "processing_time": "1.8s"
+  "summary_type": "short",
+  "model": "${defaultModelId}"
 }`;
 
 export default function ApiPlayground() {
@@ -22,13 +16,22 @@ export default function ApiPlayground() {
   const [response, setResponse] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleRun = () => {
+  const handleRun = async () => {
     setIsLoading(true);
     setResponse("");
-    setTimeout(() => {
-      setResponse(mockResponse);
+    try {
+      const res = await fetch("/api/summarize", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: request
+      });
+      const data = await res.json();
+      setResponse(JSON.stringify(data, null, 2));
+    } catch (err) {
+      setResponse(JSON.stringify({ error: err.message }, null, 2));
+    } finally {
       setIsLoading(false);
-    }, 1500);
+    }
   };
 
   const copyCode = (text) => {

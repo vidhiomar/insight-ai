@@ -8,7 +8,8 @@ router = APIRouter(
 
 class CompareInput(BaseModel):
     text: str
+    summary_type: str = "short"
 
 @router.post("/compare")
 def compare(data: CompareInput):
-    return compare_models(data.text)
+    return compare_models(data.text, data.summary_type)

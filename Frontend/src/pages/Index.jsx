@@ -1,7 +1,7 @@
 
 import { useState } from 'react';
-import TextInput from '../components/TextInput.jsx';
-import SummaryOutput from '../components/SummaryOutput.jsx';
+import { TextInput } from '../components/TextInput.jsx';
+import { SummaryOutput } from '../components/SummaryOutput.jsx';
 
 const Index = () => {
   const [inputText, setInputText] = useState('');
@@ -12,14 +12,15 @@ const Index = () => {
   const generateSummary = async () => {
     setLoading(true);
     try {
-      const res = await fetch('http://localhost:8000/api/summarize', {
+      const res = await fetch('/api/summarize', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           text: inputText,
-          type: summaryType, // 👈 IMPORTANT
+          summary_type: summaryType,
+          model: 'facebook/bart-large-cnn'
         }),
       });
 

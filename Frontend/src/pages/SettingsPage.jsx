@@ -2,11 +2,12 @@ import { useState } from "react";
 import { DashboardLayout } from "@/components/DashboardLayout";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
+import { defaultModelId, supportedModels } from "@/lib/models";
 
 export default function SettingsPage() {
   const [summaryType, setSummaryType] = useState("short");
   const [language, setLanguage] = useState("en");
-  const [model, setModel] = useState("gpt-4");
+  const [model, setModel] = useState(defaultModelId);
 
   const handleSave = () => toast.success("Settings saved!");
 
@@ -44,10 +45,11 @@ export default function SettingsPage() {
             <div>
               <label className="text-xs text-muted-foreground mb-1.5 block">Default Model</label>
               <select value={model} onChange={(e) => setModel(e.target.value)} className={selectClass}>
-                <option value="gpt-4">GPT-4</option>
-                <option value="llama-3">LLaMA 3</option>
-                <option value="gemini">Gemini Pro</option>
-                <option value="mistral">Mistral</option>
+                {supportedModels.map((supportedModel) => (
+                  <option key={supportedModel.id} value={supportedModel.id}>
+                    {supportedModel.displayName}
+                  </option>
+                ))}
               </select>
             </div>
           </div>

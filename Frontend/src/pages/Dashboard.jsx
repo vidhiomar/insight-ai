@@ -3,6 +3,7 @@ import { DashboardLayout } from "@/components/DashboardLayout";
 import { TextInput } from "@/components/TextInput";
 import { SummaryOutput } from "@/components/SummaryOutput";
 import { motion } from "framer-motion";
+import { defaultModelId, summaryTypeMap, supportedModels } from "@/lib/models";
 
 const summaryTypes = ["Short", "Detailed", "Bullet Points", "Key Insights"];
 
@@ -21,6 +22,7 @@ export default function Dashboard() {
   const [isLoading, setIsLoading] = useState(false);
   const [loadingStep, setLoadingStep] = useState("");
   const [activeType, setActiveType] = useState("Short");
+  const [activeModel, setActiveModel] = useState(defaultModelId);
 
   const handleSubmit = useCallback(async () => {
   if (!inputText.trim()) return;
@@ -38,36 +40,33 @@ export default function Dashboard() {
   }, 800);
 
   try {
-    const typeMap = {
-      Short: "short",
-      Detailed: "medium",
-      "Bullet Points": "long",
-      "Key Insights": "long",
-    };
-
-    const res = await fetch("http://127.0.0.1:8000/api/summarize", {
+    const res = await fetch("/api/summarize", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
         text: inputText,
-        type: typeMap[activeType],
+        summary_type: summaryTypeMap[activeType],
+        model: activeModel,
       }),
     });
 
     const data = await res.json();
+    if (!res.ok) {
+      throw new Error(data.detail?.message || data.detail || "Request failed");
+    }
 
-    clearInterval(interval);
-    setSummary(data.summary);
+    setSummary(data.summary ?? "Something went wrong. Please try again.");
 
   } catch (error) {
     console.error(error);
     setSummary("Something went wrong. Please try again.");
   } finally {
+    clearInterval(interval);
     setIsLoading(false);
   }
-}, [inputText, activeType]);
+}, [activeModel, activeType, inputText]);
 
   return (
     <DashboardLayout>
@@ -75,6 +74,17 @@ export default function Dashboard() {
         <div className="flex items-center justify-between mb-6">
           <h1 className="text-2xl font-bold text-foreground">Dashboard</h1>
           <div className="flex items-center gap-2">
+            <select
+              value={activeModel}
+              onChange={(e) => setActiveModel(e.target.value)}
+              className="bg-secondary/50 border border-border rounded-lg px-3 py-1.5 text-xs focus:outline-none focus:border-foreground/20 transition-colors"
+            >
+              {supportedModels.map((model) => (
+                <option key={model.id} value={model.id}>
+                  {model.displayName}
+                </option>
+              ))}
+            </select>
             {summaryTypes.map((type) => (
               <motion.button
                 key={type}

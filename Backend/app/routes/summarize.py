@@ -9,7 +9,8 @@ router = APIRouter(
 class TextInput(BaseModel):
     text: str
     summary_type: str = "short"
+    model: str = "facebook/bart-large-cnn"
 
 @router.post("/summarize")
 def summarize(data: TextInput):   
-    return summarize_text(data.text, data.summary_type)
+    return summarize_text(data.text, data.summary_type, data.model)

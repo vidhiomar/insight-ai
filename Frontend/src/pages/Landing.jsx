@@ -5,12 +5,13 @@ import { Navbar } from "@/components/Navbar";
 import { Link } from "react-router-dom";
 import { ArrowRight, ArrowLeft, FileText, Zap,Brain, Shield,Cpu,CheckCircle2,} from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
+import { supportedModels } from "@/lib/models";
 
 const features = [
   { icon: Zap, title: "Lightning Fast", desc: "Get summaries in seconds with our optimized AI pipeline." },
   { icon: Brain, title: "Context-Aware", desc: "Understands nuance, tone, and key arguments in your text." },
   { icon: Shield, title: "Private & Secure", desc: "Your data is encrypted and never stored without permission." },
-  { icon: Cpu, title: "Multi-Model", desc: "Compare results from GPT, LLaMA, Gemini, and Mistral." },
+  { icon: Cpu, title: "Multi-Model", desc: "Compare results from BART, Mistral, T5, and Pegasus." },
 ];
 
 const steps = [
@@ -32,8 +33,8 @@ const carouselSlides = [
   },
   {
     title: "Model Comparison",
-    desc: "Compare outputs from GPT-4, LLaMA, Gemini, and Mistral side by side.",
-    preview: "GPT-4 vs LLaMA vs Gemini vs Mistral",
+    desc: "Compare outputs from BART, Mistral, T5, and Pegasus side by side.",
+    preview: "BART vs Mistral vs T5 vs Pegasus",
   },
   {
     title: "Analytics Dashboard",
@@ -288,9 +289,9 @@ export default function Landing() {
           </motion.div>
 
           <div className="grid md:grid-cols-4 gap-4">
-            {["GPT-4", "LLaMA 3", "Gemini Pro", "Mistral"].map((model, i) => (
+            {supportedModels.map((model, i) => (
               <motion.div
-                key={model}
+                key={model.id}
                 variants={fadeUp}
                 custom={i}
                 initial="hidden"
@@ -301,7 +302,7 @@ export default function Landing() {
                 <div className="w-12 h-12 rounded-xl bg-foreground/10 flex items-center justify-center mx-auto mb-3">
                   <Cpu className="w-6 h-6 text-foreground/70" />
                 </div>
-                <h4 className="font-semibold mb-1 text-foreground">{model}</h4>
+                <h4 className="font-semibold mb-1 text-foreground break-all">{model.displayName}</h4>
                 <div className="flex items-center justify-center gap-1 text-xs text-muted-foreground">
                   <CheckCircle2 className="w-3 h-3 text-foreground/50" />
                   Available
@@ -327,3 +328,4 @@ export default function Landing() {
     </div>
   );
 }
+

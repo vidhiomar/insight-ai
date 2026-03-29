@@ -1,7 +1,7 @@
 <!-- ================= HEADER ================= -->
 
 <h1 align="center">
- 𝙸𝚗𝚜𝚒𝚐𝚑𝚝𝙰𝙸 ⚡</h1>
+  InsightAI ⚡</h1>
 
 <p align="center">
   <i>From raw text → to intelligent insights!</i>
@@ -23,22 +23,20 @@
 
 ---
 
-
-
 <!-- ================= FEATURES ================= -->
 
-## ✦ 𝙁𝙚𝙖𝙩𝙪𝙧𝙚𝙨
+## ✦ Features
 
 <div align="center">
 
-| 🚀 Feature             | 💡 Description                           |
-| ---------------------- | ---------------------------------------- |
-| 🧠 Smart Summarization | Converts long text into concise insights |
-| 🎚️ Length Control     | Short / Medium / Long summaries          |
-| ⚡ Fast API             | Optimized FastAPI backend                |
-| 🔄 Model Comparison    | BART vs T5 vs Pegasus                    |
-| 🎨 Clean UI            | Responsive modern interface              |
-| 📋 Export Tools        | Copy / Download summaries                |
+| Feature              | Description                                                |
+| -------------------- | ---------------------------------------------------------- |
+| Smart Summarization  | Converts long text into concise insights                   |
+| Length Control       | Short / Medium / Long / Bullet / Key insight modes         |
+| Fast API             | FastAPI backend with a shared inference interface          |
+| Model Comparison     | BART vs Mistral vs T5 vs Pegasus                           |
+| Clean UI             | Responsive frontend for summarization and model comparison |
+| Export Tools         | Copy / Download summaries                                  |
 
 </div>
 
@@ -46,15 +44,17 @@
 
 <!-- ================= ARCHITECTURE ================= -->
 
-## 🏗️ 𝘼𝙧𝙘𝙝𝙞𝙩𝙚𝙘𝙩𝙪𝙧𝙚
+## 🏗️ Architecture
 
 ```mermaid
 flowchart LR
     A[User Input] --> B[React Frontend]
     B --> C[FastAPI Backend]
-    C --> D[Service Layer]
-    D --> E[Transformer Models]
+    C --> D[Shared Summarization Service]
+    D --> E[Local BART via Transformers]
+    D --> F[HF Router Models]
     E --> C
+    F --> C
     C --> B
 ```
 
@@ -62,7 +62,7 @@ flowchart LR
 
 <!-- ================= WORKFLOW ================= -->
 
-## ⚙️ 𝙃𝙤𝙬 𝙄𝙩 𝙒𝙤𝙧𝙠𝙨
+## ⚙️ How It Works
 
 ```mermaid
 sequenceDiagram
@@ -83,29 +83,42 @@ sequenceDiagram
 
 <!-- ================= MODELS ================= -->
 
-## 🤖 𝘼𝙄 𝙈𝙤𝙙𝙚𝙡𝙨
+## 🤖 AI Models
 
-| Model      | Strength                   |
-| ---------- | -------------------------- |
-| 🧠 BART    | High-quality summarization |
-| ⚡ T5       | Fast & flexible            |
-| 📰 Pegasus | News-style summaries       |
+| UI Label | Model ID                          | Call Type |
+| -------- | --------------------------------- | --------- |
+| BART     | `facebook/bart-large-cnn`         | Runs locally using HuggingFace `transformers` |
+| Mistral  | `meta-llama/Llama-3.3-70B-Instruct` | Hugging Face router chat-completions |
+| T5       | `sshleifer/distilbart-cnn-12-6`   | Hugging Face router text2text-generation slot |
+| Pegasus  | `google/pegasus-cnn_dailymail`    | Hugging Face router summarization |
+
+Notes:
+- BART runs locally.
+- On first run, if BART is not already present in the local HuggingFace cache, the backend downloads it automatically.
+- Mistral, T5, and Pegasus are remote calls and require a user-provided Hugging Face token.
+- UI labels stay fixed as `BART`, `Mistral`, `T5`, and `Pegasus` even though the underlying router-backed models are selected for live compatibility.
 
 ---
 
 <!-- ================= TECH STACK ================= -->
 
-## 🧩 𝙏𝙚𝙘𝙝 𝙎𝙩𝙖𝙘𝙠
+## 🧩 Tech Stack
 
 <p align="center">
   <img src="https://skillicons.dev/icons?i=react,fastapi,python,tailwind,git" />
 </p>
 
+- Frontend: React + Vite
+- Backend: FastAPI
+- Local model runtime: HuggingFace `transformers` + PyTorch for BART
+- Remote model runtime: Hugging Face router via `httpx`
+- Configuration: shared model registry in `Frontend/src/config/models.json`
+
 ---
 
 <!-- ================= API ================= -->
 
-## 🔗 𝘼𝙋𝙄 𝙀𝙣𝙙𝙥𝙤𝙞𝙣𝙩𝙨
+## 🔗 API Endpoints
 
 ### ✧ Summarize
 
@@ -116,9 +129,16 @@ POST /api/summarize
 ```json
 {
   "text": "Your text...",
-  "type": "short"
+  "summary_type": "short",
+  "model": "facebook/bart-large-cnn"
 }
 ```
+
+Supported `model` values:
+- `facebook/bart-large-cnn`
+- `meta-llama/Llama-3.3-70B-Instruct`
+- `sshleifer/distilbart-cnn-12-6`
+- `google/pegasus-cnn_dailymail`
 
 ---
 
@@ -128,11 +148,33 @@ POST /api/summarize
 POST /api/compare
 ```
 
+```json
+{
+  "text": "Your text...",
+  "summary_type": "short"
+}
+```
+
 ---
 
 <!-- ================= INSTALL ================= -->
 
-## 🚀 𝙄𝙣𝙨𝙩𝙖𝙡𝙡𝙖𝙩𝙞𝙤𝙣
+## 🚀 Installation
+
+### Environment Variables
+
+Create `Backend/.env` with:
+
+```env
+HUGGINGFACE_API_KEY=your_token_here
+```
+
+Notes:
+- `HUGGINGFACE_API_KEY` is required for Mistral, T5, and Pegasus.
+- BART does not require the API key.
+- The backend also accepts `HUGGINGFACE_API_TOKEN`, `HF_TOKEN`, and `HUGGINGFACEHUB_API_TOKEN`.
+
+---
 
 ### Backend
 
@@ -143,6 +185,10 @@ venv\Scripts\activate
 pip install -r requirements.txt
 uvicorn app.main:app --reload
 ```
+
+First-time setup notes:
+- On first BART request, HuggingFace may download `facebook/bart-large-cnn` into the local cache if it is not already present.
+- Keep your internet connection available for the first BART download and for all remote model calls.
 
 ---
 
@@ -156,33 +202,37 @@ npm run dev
 
 ---
 
+### Run Locally
+
+1. Start the backend from `Backend/`.
+2. Start the frontend from `Frontend/`.
+3. Open the Vite URL shown in the terminal, usually `http://localhost:5173`.
+4. Use the dashboard or compare page to generate summaries.
+
+The frontend proxies `/api/*` requests to the FastAPI backend during local development.
 
 ---
 
 <!-- ================= FUTURE ================= -->
 
-## 🌌 𝙍𝙤𝙖𝙙𝙢𝙖𝙥
+## 🌌 Roadmap
 
-* 📊 Real-time analytics dashboard
-* 🌍 Multi-language summarization
-* ☁️ Cloud deployment
-* 🔐 Authentication system
+* Real-time analytics dashboard
+* Multi-language summarization
+* Cloud deployment
+* Authentication system
 
 ---
 
 <!-- ================= AUTHOR ================= -->
 
-## 🧑‍💻 𝘼𝙪𝙩𝙝𝙤𝙧
+## 🧑‍💻 Author
 
-**Vidhi** ✨
-🚀 AI/ML Developer | Building real-world intelligent systems
+**Vidhi**
+AI/ML Developer
 
 ---
 
 <p align="center">
   <img src="https://capsule-render.vercel.app/api?type=waving&color=0:2c5364,100:0f2027&height=140&section=footer"/>
-</p>
-
-<p align="center">
-  ⭐ <b>Star this repo to support the project</b> ⭐
 </p>

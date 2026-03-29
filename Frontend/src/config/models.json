@@ -1,0 +1,30 @@
+[
+  {
+    "id": "facebook/bart-large-cnn",
+    "displayName": "BART",
+    "task": "summarization",
+    "provider": "local_transformers",
+    "cachePath": "C:\\Users\\shrey\\.cache\\huggingface\\hub\\models--facebook--bart-large-cnn"
+  },
+  {
+    "id": "meta-llama/Llama-3.3-70B-Instruct",
+    "displayName": "Mistral",
+    "task": "chat-completion",
+    "provider": "huggingface_api",
+    "providerModelId": "meta-llama/Llama-3.3-70B-Instruct"
+  },
+  {
+    "id": "sshleifer/distilbart-cnn-12-6",
+    "displayName": "T5",
+    "task": "text2text-generation",
+    "provider": "huggingface_api",
+    "providerModelId": "sshleifer/distilbart-cnn-12-6"
+  },
+  {
+    "id": "google/pegasus-cnn_dailymail",
+    "displayName": "Pegasus",
+    "task": "summarization",
+    "provider": "huggingface_api",
+    "providerModelId": "google/pegasus-cnn_dailymail"
+  }
+]
