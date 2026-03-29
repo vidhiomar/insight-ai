@@ -230,8 +230,10 @@ The frontend proxies `/api/*` requests to the FastAPI backend during local devel
 
 **Vidhi**
 AI/ML Developer
+
 **Shrey**
 AI/ML Developer
+
 ---
 
 <p align="center">
