@@ -4,31 +4,36 @@ import { motion } from "framer-motion";
 import { Cpu, Clock, Star } from "lucide-react";
 
 const models = [
-  { name: "GPT-4", speed: "2.1s", quality: 4.8 },
-  { name: "LLaMA 3", speed: "1.8s", quality: 4.5 },
-  { name: "Gemini Pro", speed: "1.5s", quality: 4.6 },
-  { name: "Mistral", speed: "1.3s", quality: 4.3 },
+  { name: "BART", key: "bart" },
+  { name: "T5", key: "t5" },
+  { name: "Pegasus", key: "pegasus" },
 ];
-
-const mockResults = {
-  "GPT-4": "AI is rapidly transforming industries through advanced machine learning, enabling unprecedented pattern recognition and natural language understanding capabilities.",
-  "LLaMA 3": "Artificial intelligence leverages ML to transform industries, with NLP reaching near-human performance in text comprehension and generation tasks.",
-  "Gemini Pro": "The AI revolution spans healthcare to finance, with deep learning models processing vast datasets for pattern identification and language understanding.",
-  "Mistral": "Modern AI systems excel at data-driven pattern recognition and language tasks, driving transformation across healthcare, finance, and technology sectors.",
-};
 
 export default function ComparePage() {
   const [input, setInput] = useState("");
   const [results, setResults] = useState({});
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleCompare = () => {
+  const handleCompare = async () => {
     if (!input.trim()) return;
     setIsLoading(true);
-    setTimeout(() => {
-      setResults(mockResults);
+    setResults({});
+    try {
+      const res = await fetch("http://localhost:8000/api/compare", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ text: input }),
+      });
+
+      const data = await res.json();
+      setResults(data);
+    } catch (error) {
+      console.error('Compare error:', error);
+    } finally {
       setIsLoading(false);
-    }, 2500);
+    }
   };
 
   return (
@@ -56,7 +61,7 @@ export default function ComparePage() {
           </div>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {models.map((model, i) => (
             <motion.div
               key={model.name}
@@ -78,16 +83,16 @@ export default function ComparePage() {
                     <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1 }} className="w-3 h-3 border border-foreground/50 border-t-transparent rounded-full" />
                     Processing...
                   </div>
-                ) : results[model.name] ? (
-                  <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-xs text-muted-foreground leading-relaxed">{results[model.name]}</motion.p>
+                ) : results[model.key]?.text ? (
+                  <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-xs text-muted-foreground leading-relaxed">{results[model.key].text}</motion.p>
                 ) : (
                   <p className="text-xs text-muted-foreground/40">Results will appear here</p>
                 )}
               </div>
 
               <div className="flex items-center justify-between text-xs text-muted-foreground">
-                <span className="flex items-center gap-1"><Clock className="w-3 h-3" />{model.speed}</span>
-                <span className="flex items-center gap-1"><Star className="w-3 h-3" />{model.quality}</span>
+                <span className="flex items-center gap-1"><Clock className="w-3 h-3" />{results[model.key]?.time ? `${results[model.key].time}s` : 'N/A'}</span>
+                <span className="flex items-center gap-1"><Star className="w-3 h-3" />N/A</span>
               </div>
             </motion.div>
           ))}
