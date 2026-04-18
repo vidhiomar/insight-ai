@@ -234,6 +234,9 @@ AI/ML Developer
 **Shrey**
 AI/ML Developer
 
+**Rishabh R Pandey**
+AI/ML Developer
+
 ---
 
 <p align="center">
